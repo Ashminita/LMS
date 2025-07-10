@@ -6,18 +6,35 @@ import humanizeDuration from "humanize-duration";
 import YouTube from "react-youtube";
 import Footer from "../../components/students/Footer";
 import Rating from "../../components/students/Rating";
+import axios from "axios";
+import Loading from "../../components/students/Loading";
+import { toast } from "react-toastify";
 
 const Player = () => {
-  const { enrolledCourses, calculateChapterTime } = useContext(AppContext);
+  const {
+    enrolledCourses,
+    calculateChapterTime,
+    backendUrl,
+    getToken,
+    userData,
+    fetchUserEnrolledCourse,
+  } = useContext(AppContext);
   const { courseId } = useParams();
   const [courseData, setCourseData] = useState(null);
   const [openSections, setOpenSections] = useState({});
   const [playerData, setPlayerData] = useState(null);
+  const [progressData, setProgressData] = useState(null);
+  const [initialRating, setInitialRating] = useState(0);
 
   const getCourseData = () => {
     enrolledCourses.map((course) => {
       if (course._id === courseId) {
         setCourseData(course);
+        course.courseRatings.map((item) => {
+          if (item.userId === userData._id) {
+            setInitialRating(item.rating);
+          }
+        });
       }
     });
   };
@@ -27,15 +44,82 @@ const Player = () => {
   };
 
   useEffect(() => {
-    getCourseData();
+    if (enrolledCourses.length > 0) {
+      getCourseData();
+    }
   }, [enrolledCourses]);
 
-  return (
+  const markLectureAsCompleted = async () => {
+    try {
+      const token = await getToken();
+      const { data } = await axios.post(
+        backendUrl + "/api/user/update-course-progress",
+        { courseId, lectureId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (data.success) {
+        toast.success(data.message);
+        getCourseProgress();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const getCourseProgress = async () => {
+    try {
+      const token = await getToken();
+      const { data } = await axios.post(
+        backendUrl + "/api/user/get-course-progress",
+        { courseId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (data.success) {
+        setProgressData(data.progressData);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(data.message);
+    }
+  };
+
+  const handleRate = async (rating) => {
+    try {
+      const token = await getToken();
+      const { data } = await axios.post(
+        backendUrl + "/api/user/add-rating",
+        { courseId, rating },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (data.success) {
+        toast.success(data.message);
+        fetchUserEnrolledCourse();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    getCourseProgress();
+  }, []);
+
+  return courseData ? (
     <>
       <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 p-6 gap-6">
         {/* left column */}
         <div className="w-full md:w-2/5 bg-white rounded-lg shadow p-4 overflow-y-auto max-h-screen">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-800 border-b pb-2">Course Structure</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-800 border-b pb-2">
+            Course Structure
+          </h2>
 
           <div className="space-y-2">
             {courseData &&
@@ -75,7 +159,7 @@ const Player = () => {
                         <li key={i} className="flex items-start gap-3">
                           <img
                             src={
-                              false ? assets.blue_tick_icon : assets.play_icon
+                              progressData && progressData.lectureCompleted.includes(playerData.lectureId) ? assets.blue_tick_icon : assets.play_icon
                             }
                             alt="play icon"
                             className="w-4 h-4 mt-1"
@@ -116,8 +200,10 @@ const Player = () => {
           </div>
 
           <div className="mt-6 border-t pt-4">
-            <h1 className="text-lg font-medium text-gray-700 mb-2">Rate this Course:</h1>
-            <Rating initialRating={0}/>
+            <h1 className="text-lg font-medium text-gray-700 mb-2">
+              Rate this Course:
+            </h1>
+            <Rating initialRating={initialRating} onRate={handleRate} />
           </div>
         </div>
 
@@ -126,15 +212,16 @@ const Player = () => {
           {playerData ? (
             <div>
               <YouTube
-                videoId={playerData.lectureUrl.split('/').pop()}
+                videoId={playerData.lectureUrl.split("/").pop()}
                 iframeClassName="w-full aspect-video rounded-lg"
               />
               <div className="mt-4">
                 <p className="text-lg font-semibold text-gray-800 mb-2">
-                  {playerData.chapter}.{playerData.lecture} {playerData.lectureTitle}
+                  {playerData.chapter}.{playerData.lecture}{" "}
+                  {playerData.lectureTitle}
                 </p>
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition">
-                  {false ? 'Completed' : 'Mark Complete'}
+                <button onClick={()=>markLectureAsCompleted(playerData.lectureId)} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition">
+                  {progressData && progressData.lectureCompleted.includes(playerData.lectureId) ? "Completed" : "Mark Complete"}
                 </button>
               </div>
             </div>
@@ -147,8 +234,10 @@ const Player = () => {
           )}
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
+  ) : (
+    <Loading />
   );
 };
 
