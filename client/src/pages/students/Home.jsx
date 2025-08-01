@@ -7,13 +7,14 @@ import Footer from '../../components/students/Footer'
 
 const Home = () => {
   return (
-    <div className='flex flex-col items-center space-y-7 text-center'>
-      <Hero/>
-      <Companies/>
-      <CoursesSection/>
-      <CallToAction/>
-      <Footer/>
-    </div>
+    <div className="flex flex-col items-center space-y-7 text-center bg-[#0E1116] text-white min-h-screen">
+  <Hero />
+  <Companies />
+  <CoursesSection />
+  <CallToAction />
+  <Footer />
+</div>
+
   )
 }
 

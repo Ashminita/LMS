@@ -37,63 +37,79 @@ const Navbar = () => {
   };
   return (
     <div
-      className={`flex items-center justify-between px-4 sm:px-10 md:px-14 lg:px-36 border-b border-gray-500 py-4 ${
-        isCourseListPage ? "bg-white" : "bg-cyan-100/70"
-      }`}
-    >
-      <img
-        onClick={() => navigate("/")}
-        src={assets.logo}
-        alt="Logo"
-        className="w-28 lg:w-32 cursor-pointer"
-      />
-      <div className="hidden md:flex items-center gap-5 text-gray-500">
-        <div className="flex items-center gap-5">
-          {user && (
-            <>
-              <button
-                onClick={becomeEducator}
-              >
-                {isEducator ? "Educator Dashboard" : "Become Educator"}
-              </button>
-              | <Link to="my-enrollments">My enrollments</Link>
-            </>
-          )}
-        </div>
-        {user ? (
-          <UserButton />
-        ) : (
+  className={`flex items-center justify-between px-4 sm:px-10 md:px-14 lg:px-36 border-b py-4 ${
+    isCourseListPage ? "bg-white" : "bg-[#0E1116]"
+  }`}
+>
+  <img
+    onClick={() => navigate("/")}
+    src={assets.print}
+    alt="Logo"
+    className="w-28 lg:w-32 cursor-pointer"
+  />
+  <div className="hidden md:flex items-center gap-5 text-[#80D8FF]">
+    <div className="flex items-center gap-5">
+      {user && (
+        <>
           <button
-            onClick={() => openSignIn()}
-            className="bg-blue-600 text-white px-5 py-2 rounded-full"
+            onClick={becomeEducator}
+            className="hover:text-[#00C6FF] transition duration-300"
           >
-            Create Account
+            {isEducator ? "Educator Dashboard" : "Become Educator"}
           </button>
-        )}
-      </div>
-      {/* For Phone View */}
-      <div className="md:hidden flex iems-center gap-2 sm:gap-5 text-gray-500">
-        <div className="flex items-center gap-1 sm:gap-2 max-sm:text-xs">
-          {user && (
-            <>
-              <button
-                onClick={becomeEducator}
-              >
-                {isEducator ? "Educator Dashboard" : "Become Educator"}
-              </button>
-              | <Link to="my-enrollments">My enrollments</Link>
-            </>
-          )}
-        </div>
-        {user ? (
-          <UserButton />
-        ) : (
-          <button onClick={() => openSignIn()}>
-            <img src={assets.user_icon} alt="" />
-          </button>
-        )}
-      </div>
+          <span className="text-gray-400">|</span>
+          <Link
+            to="my-enrollments"
+            className="hover:text-[#00C6FF] transition duration-300"
+          >
+            My enrollments
+          </Link>
+        </>
+      )}
     </div>
+    {user ? (
+      <UserButton />
+    ) : (
+      <button
+        onClick={() => openSignIn()}
+        className="bg-gradient-to-r from-[#00C6FF] to-[#6D5BFF] text-white px-5 py-2 rounded-full shadow-md hover:opacity-90 transition duration-300"
+      >
+        Create Account
+      </button>
+    )}
+  </div>
+
+  {/* For Phone View */}
+  <div className="md:hidden flex items-center gap-2 sm:gap-5 text-[#80D8FF]">
+    <div className="flex items-center gap-1 sm:gap-2 max-sm:text-xs">
+      {user && (
+        <>
+          <button
+            onClick={becomeEducator}
+            className="hover:text-[#00C6FF] transition duration-300"
+          >
+            {isEducator ? "Educator Dashboard" : "Become Educator"}
+          </button>
+          <span className="text-gray-400">|</span>
+          <Link
+            to="my-enrollments"
+            className="hover:text-[#00C6FF] transition duration-300"
+          >
+            My enrollments
+          </Link>
+        </>
+      )}
+    </div>
+    {user ? (
+      <UserButton />
+    ) : (
+      <button onClick={() => openSignIn()}>
+        <img src={assets.user_icon} alt="user" className="w-6 h-6" />
+      </button>
+    )}
+  </div>
+</div>
+
   );
 };
 

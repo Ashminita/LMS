@@ -11,25 +11,31 @@ const SearchBar = ({data}) => {
   }
   return (
     <div>
-      <form onSubmit={onSearchHandler} className="mzx-w-xl w-full md:h-14 h-12 flex items-center bg-white border border-gray-500/20 rounded">
-        <img
-          src={assets.search_icon}
-          alt="search_icon"
-          className="md:w-auto w-10 px-3"
-        />
-        <input onChange={e=>setInput(e.target.value)} value={input}
-          type="text"
-          placeholder="Search for courses"
-          className="w-full h-full outline-none text-gray-500/80"
-        />
-        <button
-          type="submit"
-          className="bg-blue-600 rounded text-white md:px-10 px-7 md:py-3 py-2 mx-1"
-        >
-          Search
-        </button>
-      </form>
-    </div>
+  <form
+    onSubmit={onSearchHandler}
+    className="max-w-xl w-full md:h-14 h-12 flex items-center bg-[#1A1D23] border border-[#2F3C4C] rounded shadow-md"
+  >
+    <img
+      src={assets.search_icon}
+      alt="search_icon"
+      className="md:w-auto w-10 px-3 opacity-80"
+    />
+    <input
+      onChange={(e) => setInput(e.target.value)}
+      value={input}
+      type="text"
+      placeholder="Search for courses"
+      className="w-full h-full outline-none bg-transparent text-[#B0BEC5] placeholder:text-[#90A4AE] px-1"
+    />
+    <button
+      type="submit"
+      className="bg-gradient-to-r from-[#00C6FF] to-[#6D5BFF] rounded text-white md:px-10 px-7 md:py-3 py-2 mx-1 hover:opacity-90 transition duration-300"
+    >
+      Search
+    </button>
+  </form>
+</div>
+
   );
 };
 

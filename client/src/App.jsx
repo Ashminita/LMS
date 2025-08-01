@@ -19,7 +19,7 @@ import { ToastContainer} from 'react-toastify';
 const App = () => {
   const isEducatorRoute = useMatch('/educator/*')
   return (
-    <div className='text-default min-h-screen bg-white'>
+    <div className='text-[#1c2d47] min-h-screen bg-[#f5faff]'>
       <ToastContainer/>
       {!isEducatorRoute && <Navbar/>}
       <Routes>
