@@ -1,4 +1,4 @@
-# LMS Web Application
+# Arambh -Start from here
 
 A full-stack Learning Management System (LMS) web application built using the MERN stack. This platform allows educators to publish online courses and students to enroll, watch video lectures, and manage their learning experience seamlessly.
 
