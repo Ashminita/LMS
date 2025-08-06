@@ -54,14 +54,14 @@ A full-stack Learning Management System (LMS) web application built using the ME
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/lms-web-app.git
-cd lms-web-app
+git clone https://github.com/Ashminita/LMS.git
+cd LMS
 ```
 ### 2. Set up environment variables
 Create a .env file in both the client/ and server/ folders.
 
 Example (server/.env):
-```bash
+```env
 PORT=5000
 MONGO_URI=your_mongo_connection_string
 CLERK_SECRET_KEY=your_clerk_secret
@@ -69,7 +69,7 @@ STRIPE_SECRET_KEY=your_stripe_secret_key
 ```
 
 Example (client/.env):
-```bash
+```env
 VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
 VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
 VITE_BACKEND_URL=http://localhost:5000
@@ -78,16 +78,18 @@ VITE_BACKEND_URL=http://localhost:5000
 ```bash
 cd server
 npm install
-
-cd ../client
+```
+```bash
+cd client
 npm install
 ```
 ### 4. Run the application
+#### In /server
 ```bash
-# In /server
 npm start
-
-# In /client
+```
+#### In /client
+```bash
 npm run dev
 ```
 
